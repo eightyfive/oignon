@@ -5,27 +5,37 @@ use Eyf\Oignon\Layer;
 
 class ResizeCrop extends Resize
 {
-    protected $x;
-    protected $y;
+    protected $cropWidth;
+    protected $cropHeight;
 
-    public function __construct($width, $height, $x = 0, $y = 0)
+    public function __construct($width, $height)
     {
-        $this->width = $width;
-        $this->height = $height;
-        $this->keepRatio = true; // important: Used in parent @see perform()
+        $this->width      = $width;
+        $this->height     = $height;
 
-        $this->x = $x;
-        $this->y = $y;
+        $this->cropWidth  = $width;
+        $this->cropHeight = $height;
 
-        if (!$width || !$height)
-            throw new \InvalidArgumentException('$width AND $height must be specified and not empty');
+        $this->keepRatio  = true; // important: Used in parent @see perform()
     }
 
     public function perform(Layer $image)
     {
-        parent::perform($image);
+        list($w, $h) = $this->getSize($image);
         
-        $image->doCrop($this->width, $this->height, $this->x, $this->y);
+        if ($w < $this->width) {
+            $this->height = null;
+        }
+        if ($h < $this->height) {
+            $this->width = null;
+        }
+
+        parent::perform($image);
+
+        $x = ($image->getWidth() - $this->cropWidth) / 2;
+        $y = ($image->getHeight() - $this->cropHeight) / 2;
+        
+        $image->doCrop($this->cropWidth, $this->cropHeight, $x, $y);
     }
 
 }
