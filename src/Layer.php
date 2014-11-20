@@ -1,16 +1,16 @@
 <?php
-namespace Oignon;
+namespace Eyf\Oignon;
 
-use Oignon\Action;
+use Eyf\Oignon\Action;
 
-use Oignon\Action\Resize as ResizeAction;
-use Oignon\Action\ResizeFit as ResizeFitAction;
-use Oignon\Action\ResizeCrop as ResizeCropAction;
+use Eyf\Oignon\Action\Resize as ResizeAction;
+use Eyf\Oignon\Action\ResizeFit as ResizeFitAction;
+use Eyf\Oignon\Action\ResizeCrop as ResizeCropAction;
 
-use Oignon\Action\Crop as CropAction;
-use Oignon\Action\CropCenter as CropCenterAction;
+use Eyf\Oignon\Action\Crop as CropAction;
+use Eyf\Oignon\Action\CropCenter as CropCenterAction;
 
-use Oignon\Action\Center as CenterAction;
+use Eyf\Oignon\Action\Center as CenterAction;
 
 abstract class Layer
 {

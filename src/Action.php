@@ -1,5 +1,5 @@
 <?php
-namespace Oignon;
+namespace Eyf\Oignon;
 
 abstract class Action
 {

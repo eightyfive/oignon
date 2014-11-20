@@ -1,8 +1,8 @@
 <?php
-namespace Oignon\Action;
+namespace Eyf\Oignon\Action;
 
-use Oignon\Action;
-use Oignon\Layer;
+use Eyf\Oignon\Action;
+use Eyf\Oignon\Layer;
 
 
 class Resize extends Action
