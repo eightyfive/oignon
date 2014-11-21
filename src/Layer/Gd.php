@@ -33,9 +33,9 @@ class Gd extends Layer {
         $this->getGD()->toGif($filename);
     }
 
-    public function saveAsJpeg($filename = null, $quality = 80)
+    public function saveAsJpeg($filename = null, $quality = 80, $progressive = true)
     {
-        $this->getGD()->toJpeg($filename, $quality);
+        $this->getGD()->toJpeg($filename, $quality, $progressive);
     }
 
     public function saveAsPng($filename = null)

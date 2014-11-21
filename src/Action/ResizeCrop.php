@@ -12,11 +12,10 @@ class ResizeCrop extends Resize
     {
         $this->width      = $width;
         $this->height     = $height;
-
         $this->cropWidth  = $width;
         $this->cropHeight = $height;
 
-        $this->keepRatio  = true; // important: Used in parent @see perform()
+        $this->keepRatio = true; // important: Used in parent @see perform()
     }
 
     public function perform(Layer $image)
