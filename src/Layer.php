@@ -47,7 +47,6 @@ abstract class Layer
     abstract public function saveAsJpeg($filename = null, $quality = 80, $progressive = true);
     abstract public function saveAsPng($filename = null);
     abstract public function duplicate();
-    abstract public function getResource();
     abstract public function reset($width, $height);
 
 
@@ -105,7 +104,7 @@ abstract class Layer
         $this->addAction(new ResizeFitAction($w, $h));
     }
 
-    public function resizeCrop($w, $h, $x = 0, $y = 0)
+    public function resizeCrop($w, $h, $x = null, $y = null)
     {
         $this->addAction(new ResizeCropAction($w, $h, $x, $y));
     }
