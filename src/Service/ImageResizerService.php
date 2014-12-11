@@ -20,17 +20,95 @@ class ImageResizerService
         $this->cacheDirName = $cacheDirName;
     }
 
-    public function resize($webSrc, $screen, $size, Response $response = null)
+    protected function findSize($webSrc, $screen, $format = null)
     {
-        if (!isset($this->sizes[$screen])) {
-            throw new \RuntimeException('Unknown screen size');
+        $sizeSets = $this->findSets($webSrc);
+
+        if (!count($sizeSets)) {
+            throw new \RuntimeException('No sizes found for image: '.$webSrc);
         }
 
-        if (!isset($this->sizes[$screen][$size])) {
-            throw new \RuntimeException('Unknown image size');
+        if ($format) {
+            $sizeSets = $this->findFormatSets($format, $sizeSets);
+
+            if (!count($sizeSets)) {
+                throw new \RuntimeException('No sizes found for image identifier `'.$format.'`: '.$webSrc);
+            }
         }
 
-        $webDest = $this->renameImageSrc($webSrc, $screen, $size);
+        $size = $this->findScreenSize($screen, $sizeSets);
+
+        if (!$size) {
+            throw new \RuntimeException('No size found for screen `'.$screen.'` and image: '.$webSrc);
+        }
+
+        return $size;
+    }
+
+    protected function findSets($webSrc)
+    {
+        $sizeSets = array();
+        $crumbs = explode('/', ltrim($webSrc, '/'));
+
+        while (count($crumbs)) {
+
+            $set = $this->findSet($crumbs);
+
+            if ($set) {
+                array_push($sizeSets, $set);
+            }
+
+            array_pop($crumbs);
+        }
+
+
+        return $sizeSets;
+    }
+
+    protected function findSet(array $crumbs)
+    {
+        $sizeSet = null;
+
+        while (count($crumbs) && $sizeSet == null) {
+
+            $path = implode('/', $crumbs);
+            $sizeSet = isset($this->sizes[$path]) ? $this->sizes[$path] : null;
+            array_shift($crumbs);
+        }
+
+        return $sizeSet ? $sizeSet : null;
+    }
+
+    protected function findFormatSets($format, array $sizeSets)
+    {
+        $formatSizeSets = array();
+
+        foreach ($sizeSets as $sizeSet) {
+
+            if (isset($sizeSet[$format])) {
+                array_push($formatSizeSets, $sizeSet[$format]);
+            }
+        }
+
+        return $formatSizeSets;
+    }
+
+    protected function findScreenSize($screen, array $sizeSets)
+    {
+        foreach ($sizeSets as $sizeSet) {
+
+            if (isset($sizeSet[$screen])) {
+
+                return $sizeSet[$screen];
+            }
+        }
+
+        return null;
+    }
+
+    public function resize($webSrc, $screen, $format = null, Response $response = null)
+    {
+        $webDest = $this->renameImageSrc($webSrc, $screen, $format);
 
         $src  = $this->webDir.$webSrc;
         $dest = $this->webDir.$webDest;
@@ -38,7 +116,8 @@ class ImageResizerService
         $layer = $this->oignon->openFile($src);
 
         // Resize
-        $size = $this->sizes[$screen][$size];
+        $size = $this->findSize($webSrc, $screen, $format);
+
         if (count($size) === 4) {
 
             list($w, $h, $x, $y) = $size;
@@ -70,7 +149,7 @@ class ImageResizerService
         }
     }
 
-    public function renameImageSrc($webSrc, $screen, $size)
+    public function renameImageSrc($webSrc, $screen, $format = null)
     {
         $info = parse_url($webSrc);
 
@@ -82,7 +161,13 @@ class ImageResizerService
         $filename  = array_pop($crumbs);
         $webSrcDir = implode('/', $crumbs);
 
-        $path = array($this->cacheDirName, $webSrcDir, $screen, $size, $filename);
+        $path = array($this->cacheDirName, $webSrcDir);
+        
+        if ($format)
+            array_push($path, $format);
+
+        array_push($path, $screen);
+        array_push($path, $filename);
 
         if (isset($info['scheme'])) {
             array_unshift($path, implode('://', array($info['scheme'], $info['host'])));
@@ -90,7 +175,7 @@ class ImageResizerService
             $path = implode('/', $path);
         } else {
 
-            // Relative paths needs the leading `/` back.
+            // Non-domain paths needs the absolute leading `/` back.
             $path = '/'.implode('/', $path);
         }
 

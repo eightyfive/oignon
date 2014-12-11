@@ -25,9 +25,9 @@ class ImageResizerExtension extends \Twig_Extension
         );
     }
 
-    public function renameSrc($webSrc, $screen, $size)
+    public function renameSrc($webSrc, $screen, $format = null)
     {
-        return $this->resizer->renameImageSrc($webSrc, $screen, $size);
+        return $this->resizer->renameImageSrc($webSrc, $screen, $format);
     }
 
     /**
