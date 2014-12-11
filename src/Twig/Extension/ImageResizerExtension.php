@@ -21,7 +21,7 @@ class ImageResizerExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('image_resize', array($this, 'renameSrc'))
+            new \Twig_SimpleFilter('picture_source', array($this, 'renameSrc'))
         );
     }
 
@@ -37,6 +37,6 @@ class ImageResizerExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'eyf_image_resize';
+        return 'eyf_picture_source';
     }
 }
