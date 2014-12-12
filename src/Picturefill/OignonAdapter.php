@@ -18,9 +18,9 @@ class OignonAdapter implements ResizerAdapterInterface
     {
         $layer = $this->oignon->openFile($src);
 
-        if (!$height)
+        if ($height === null)
             $layer->resize($width, null, true);
-        else if (!$x)
+        else if ($x === null)
             $layer->resizeFit($width, $height);
         else
             $layer->resizeCrop($width, $height, $x, $y);
