@@ -2,7 +2,7 @@
 namespace Eyf\Oignon\Image;
 
 use Eyf\Oignon\Layer;
-use Eyf\Oignon\GD\Resource as GDResource;
+use Eyf\Oignon\GD\Resource;
 
 class Gd extends Layer {
 
@@ -96,7 +96,7 @@ class Gd extends Layer {
 
     public function reset($w, $h)
     {
-        $this->resource = new GDResource($w, $h);
+        $this->resource = new Resource($w, $h);
     }
 
     public function getResource()
@@ -115,9 +115,9 @@ class Gd extends Layer {
     protected function createGD()
     {
         if (isset($this->filename))
-            $resource = new GDResource($this->filename, $this->imageType);
+            $resource = new Resource($this->filename, $this->imageType);
         else
-            $resource = new GDResource($this->getWidth(), $this->getHeight());
+            $resource = new Resource($this->getWidth(), $this->getHeight());
 
         // $transparent = imagecolorallocatealpha($resource, 255, 255, 255, 127);
         // imagefill($resource, 0, 0, $transparent);
@@ -126,7 +126,7 @@ class Gd extends Layer {
         return $resource;
     }
 
-    protected function setGD(GDResource $resource)
+    protected function setGD(Resource $resource)
     {
         if (isset($this->resource))
             $this->resource->destroy();
