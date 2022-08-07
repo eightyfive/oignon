@@ -95,22 +95,22 @@ class Resource
 
     public function isJpeg()
     {
-        return $this->imageType === IMAGETYPE_JPEG;
+        return $this->getImageType() === IMAGETYPE_JPEG;
     }
 
     public function isGif()
     {
-        return $this->imageType === IMAGETYPE_GIF;
+        return $this->getImageType() === IMAGETYPE_GIF;
     }
 
     public function isPng()
     {
-        return $this->imageType === IMAGETYPE_PNG;
+        return $this->getImageType() === IMAGETYPE_PNG;
     }
 
     public function duplicate()
     {
-        // /!\ $copy is NOT a `clone`
+        // /!\ $copy is NOT a "full" `clone`
         // If you delete $this->resource,
         // Then $copy->resource will not be a valid GD resource anymore (type 'Unknown')
 
@@ -180,8 +180,9 @@ class Resource
         imagegif($this->resource, $filename);
     }
 
-    public function toJpeg($filename = null, $quality = 80)
+    public function toJpeg($filename = null, $quality = 80, $progressive = true)
     {
+        imageinterlace($this->resource, $progressive ? 1 : 0);
         imagejpeg($this->resource, $filename, $quality);
     }
 

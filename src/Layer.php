@@ -44,7 +44,7 @@ abstract class Layer
 
     abstract public function paste(Layer $image, $x = 0, $y = 0);
     abstract public function saveAsGif($filename = null);
-    abstract public function saveAsJpeg($filename = null, $quality = 80);
+    abstract public function saveAsJpeg($filename = null, $quality = 80, $progressive = true);
     abstract public function saveAsPng($filename = null);
     abstract public function duplicate();
     abstract public function getResource();
