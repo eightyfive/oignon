@@ -1,16 +1,16 @@
 <?php
 
-namespace Oignon;
+namespace Eyf\Oignon;
 
-use Oignon\Util\FileFormat;
+use Eyf\Oignon\Util\FileFormat;
 
-use Oignon\Action;
-use Oignon\Action\Resize as ResizeAction;
-use Oignon\Action\ResizeFit as ResizeFitAction;
-use Oignon\Action\ResizeCrop as ResizeCropAction;
-use Oignon\Action\Crop as CropAction;
+use Eyf\Oignon\Action;
+use Eyf\Oignon\Action\Resize as ResizeAction;
+use Eyf\Oignon\Action\ResizeFit as ResizeFitAction;
+use Eyf\Oignon\Action\ResizeCrop as ResizeCropAction;
+use Eyf\Oignon\Action\Crop as CropAction;
 
-use Oignon\Image\Gd as Image;
+use Eyf\Oignon\Layer\Gd as ImageLayer;
 
 class Oignon
 {
@@ -206,6 +206,6 @@ class Oignon
 
     protected function newLayer($width, $height = 0, $x = 0, $y = 0)
     {
-        return new Image($width, $height, $x, $y);
+        return new ImageLayer($width, $height, $x, $y);
     }
 }

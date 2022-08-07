@@ -1,5 +1,5 @@
 <?php
-namespace Oignon\Util;
+namespace Eyf\Oignon\Util;
 
 class FileFormat {
 

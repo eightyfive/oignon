@@ -1,7 +1,7 @@
 <?php
-namespace Oignon\Action;
+namespace Eyf\Oignon\Action;
 
-use Oignon\Layer;
+use Eyf\Oignon\Layer;
 
 class ResizeCrop extends Resize
 {
