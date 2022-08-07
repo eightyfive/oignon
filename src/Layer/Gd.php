@@ -1,5 +1,5 @@
 <?php
-namespace Eyf\Oignon\Image;
+namespace Eyf\Oignon\Layer;
 
 use Eyf\Oignon\Layer;
 use Eyf\Oignon\GD\Resource;
