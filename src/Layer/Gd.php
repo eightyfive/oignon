@@ -2,7 +2,7 @@
 namespace Eyf\Oignon\Layer;
 
 use Eyf\Oignon\Layer;
-use Eyf\Oignon\GD\Resource;
+use Eyf\Oignon\Util\GdResource;
 
 class Gd extends Layer {
 
@@ -30,17 +30,17 @@ class Gd extends Layer {
 
     public function saveAsGif($filename = null)
     {
-        $this->getGD()->toGif($filename);
+        $this->getGdResource()->toGif($filename);
     }
 
     public function saveAsJpeg($filename = null, $quality = 80, $progressive = true)
     {
-        $this->getGD()->toJpeg($filename, $quality, $progressive);
+        $this->getGdResource()->toJpeg($filename, $quality, $progressive);
     }
 
     public function saveAsPng($filename = null)
     {
-        $this->getGD()->toPng($filename);
+        $this->getGdResource()->toPng($filename);
     }
 
     public function paste(Layer $topaste, $x = 0, $y = 0, $opacity = 100)
@@ -50,22 +50,22 @@ class Gd extends Layer {
         if ($opacity < 100) {
 
             if (!$topaste->isJpeg())
-                $this->getGD()->mergeAlpha($topaste->getGD(), $opacity, $x, $y);
+                $this->getGdResource()->mergeAlpha($topaste->getGdResource(), $opacity, $x, $y);
             else
-                $this->getGD()->merge($topaste->getGD(), $opacity, $x, $y);
+                $this->getGdResource()->merge($topaste->getGdResource(), $opacity, $x, $y);
         }
         else
-            $this->getGD()->paste($topaste->getGD(), $x, $y);
+            $this->getGdResource()->paste($topaste->getGdResource(), $x, $y);
     }
 
     protected function _doResize($w, $h)
     {
-        $this->getGD()->resize($w, $h);
+        $this->getGdResource()->resize($w, $h);
     }
 
     protected function _doCrop($w, $h, $x = 0, $y = 0)
     {
-        $this->getGD()->crop($w, $h, $x, $y);
+        $this->getGdResource()->crop($w, $h, $x, $y);
     }
 
     public function isGif()
@@ -86,38 +86,33 @@ class Gd extends Layer {
     public function duplicate()
     {
         list($w, $h) = $this->getSize();
-        $resource = $this->getGD()->duplicate();
+        $resource = $this->getGdResource()->duplicate();
 
         $copy = new static($w, $h);
-        $copy->setGD($resource);
+        $copy->setGdResource($resource);
 
         return $copy;
     }
 
     public function reset($w, $h)
     {
-        $this->resource = new Resource($w, $h);
+        $this->resource = new GdResource($w, $h);
     }
 
-    public function getResource()
-    {
-        return $this->getGD()->get();
-    }
-
-    protected function getGD()
+    protected function getGdResource()
     {
         if (!isset($this->resource))
-            $this->resource = $this->createGD();
+            $this->resource = $this->createGdResource();
 
         return $this->resource;
     }
 
-    protected function createGD()
+    protected function createGdResource()
     {
         if (isset($this->filename))
-            $resource = new Resource($this->filename, $this->imageType);
+            $resource = new GdResource($this->filename, $this->imageType);
         else
-            $resource = new Resource($this->getWidth(), $this->getHeight());
+            $resource = new GdResource($this->getWidth(), $this->getHeight());
 
         // $transparent = imagecolorallocatealpha($resource, 255, 255, 255, 127);
         // imagefill($resource, 0, 0, $transparent);
@@ -126,7 +121,7 @@ class Gd extends Layer {
         return $resource;
     }
 
-    protected function setGD(Resource $resource)
+    protected function setGdResource(GdResource $resource)
     {
         if (isset($this->resource))
             $this->resource->destroy();
@@ -136,7 +131,7 @@ class Gd extends Layer {
 
     public function __destruct()
     {
-        $this->getGD()->destroy();
+        $this->getGdResource()->destroy();
     }
 
     public function destroy()

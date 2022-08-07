@@ -12,7 +12,7 @@ use Eyf\Oignon\Action\Crop as CropAction;
 
 use Eyf\Oignon\Layer\Gd as ImageLayer;
 
-class Oignon
+abstract class Oignon
 {
     protected $width;
     protected $height;
@@ -21,6 +21,8 @@ class Oignon
     protected $fileFormat;
 
     protected $layers = array();
+
+    abstract protected function newLayer($width, $height = 0, $x = 0, $y = 0);
 
     public function __construct($width = 0, $height = 0)
     {
@@ -202,10 +204,5 @@ class Oignon
     public function getContentType()
     {
         return isset($this->fileFormat) ? $this->fileFormat->getContentType() : null;
-    }
-
-    protected function newLayer($width, $height = 0, $x = 0, $y = 0)
-    {
-        return new ImageLayer($width, $height, $x, $y);
     }
 }
